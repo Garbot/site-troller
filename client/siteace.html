@@ -1,0 +1,214 @@
+<head>
+  <title>siteace</title>
+</head>
+
+<body>
+
+</body>
+
+<template name="ApplicationLayout">
+	{{> yield "navigation"}}
+	{{> yield "form"}}
+	{{> yield "main"}}
+	{{> yield "commentform"}}
+	{{> yield "comments"}}
+</template>
+
+
+<template name="navigation">
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+  
+      <!-- start collapsed navbar-->
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#main_navbar" aria-expanded="false"><span class="glyphicon glyphicon-menu-hamburger"></span></button>
+      </div><!-- / collapsed navbar-->
+
+      <!-- start un-collapsed navbar-->
+      <div class="collapse navbar-collapse" id="main_navbar">
+        <ul class="nav navbar-nav">
+	        <li>
+		        <a href="/">
+			    	Site Troller
+			    </a>
+		 	</li>
+	        <li>
+				{{#if currentUser}}
+				<a class="js-toggle-website-form" href="#">
+			  		<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>  Add Website
+				</a>
+				{{/if}}
+	        </li>
+	        <li>
+	        	<a href="/search">
+	        		<span class="glyphicon glyphicon-search" aria-hidden="true"></span> Search
+	        	</a>
+	        </li>
+	        <li><div class="navbar-form navbar-right"><span class="loginButtons">{{>loginButtons}}</span></div></li>
+        </ul>
+
+      </div><!-- / un-collapsed navbar-->
+
+    </div> <!-- /container -->
+  </nav>
+ </template>
+
+
+<template name="website_form">
+	<div id="website_form" class="hidden_div">
+		<form class="js-save-website-form">
+		  <div class="form-group">
+		    <label for="url">Site address</label>
+		    <input type="text" class="form-control" id="url" placeholder="http://www.mysite.com">
+		  </div>
+		  <div class="form-group">
+		    <label for="title">Title</label>
+		    <input type="text" class="form-control" id="title" placeholder="Mysite">
+		  </div>
+		    <div class="form-group">
+		    <label for="description">Description</label>
+		    <input type="text" class="form-control" id="description" placeholder="I found this site really useful for ...">
+		  </div>
+
+		  <button type="submit" class="btn btn-default">Submit</button>
+		</form>
+	</div>
+</template>
+
+<!-- template that displays several website items -->
+<template name="website_list">
+	<div class="container">
+	<ol class="site_list">
+		{{#each websites}}
+		{{>website_item}}
+		{{/each}}
+	</ol>
+	</div>
+</template>
+
+<template name="searchBox">
+	<div class="container">
+		<div class="search-page">
+	    <h4>Search:</h4>{{> EasySearch.Input index=websitesIndex }}
+		</div>
+		{{#EasySearch.IfInputEmpty index=websitesIndex}}
+	    	<div class="no-results"></div>
+	    {{else}}
+	    <ul>
+	        {{#EasySearch.Each index=websitesIndex }}
+	        <li><a href="/site/{{_id}}"><h5>{{title}}</h5></a>{{description}}</li>
+	        {{/EasySearch.Each}}
+
+	    </ul>
+	    {{/EasySearch.IfInputEmpty}}
+	</div>
+</template>
+
+<!-- template that displays individual website entries -->
+<template name="website_item">
+	<!--<div class="row">-->
+	<li class="list_item" id="{{_id}}">
+		<div class="row">
+			<a href="{{url}}">{{title}}</a>
+			<p>
+				{{description}}
+			</p>
+
+			<p>
+					<a href="/site/{{_id}}">Details</a>
+			</p>
+			<div class="col-md-2 BUTANS">
+				<p>
+				Rating: <strong>{{rating}}&nbsp;</strong>
+				</p>
+				<a href="#" class="btn btn-default js-upvote">
+					<span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span>
+				</a>
+				<a href="#" class="btn btn-default js-downvote">
+					<span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span>
+				</a>
+			</div>
+		</div>
+	</li>
+	<!--</div> THROWS OFF ANIMATION FOR SOME REASON?  INVESTIGAT WHEN YOU HAVE INTERWEBS-->
+</template>
+
+<template name="website_item_detail">
+	
+	<div class="container website-item-detail" id="{{_id}}">
+		<div class="row">
+			<div class="col-xs-1 vote-box">
+				<a href="#" class="js-upvote">
+					<span class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span>
+				</a>
+					<h3>{{rating}}</h3>
+				<a href="#" class="js-downvote">
+					<span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+				</a>
+			</div>			
+			
+			<div class="col-xs-11">
+				<div><a href="{{url}}">{{title}}</a></div>
+				<div>{{description}}</div>
+			</div>
+		</div>
+
+		<div class="comment-header">
+			<h4>Comments:</h4>
+			{{#if currentUser}}
+				<a class="btn btn-default js-toggle-comment-form" href="#">
+			  		<span class="glyphicon glyphicon-comment" aria-hidden="true"></span> Comment
+				</a>			
+			{{/if}}
+		</div>	
+
+		<div id="comment_form" class="hidden_div container">
+			<form class="js-add-comment-form">
+				<div class="row">
+					<div class="form-group col-xs-12 col-md-9 col-lg-6">
+					    <label for="comment_box">Comment:</label>
+					    <input type="text" class="form-control" id="comment_box">
+					</div>
+				 </div>
+			  	<button type="submit" class="btn btn-default">Submit</button>
+			</form>
+		</div>
+
+		<div id="comments">
+			<ul>
+			{{#each comments}}
+				{{> ind_comment}}
+			{{/each}}
+			</ul>
+		</div>
+	</div>
+
+</template>
+
+<template name="ind_comment">
+	<li class="list_item" id="{{commentnumber}}">
+		<div class="row ind-comment">
+			
+			<div class="col-xs-1 vote-box">
+				<a href="#" class="js-upvote vote-arrow">
+					<span class="glyphicon glyphicon-triangle-top" aria-hidden="true"></span>
+				</a>
+					<span class="rating">{{rating}}</span>
+				<a href="#" class="js-downvote vote-arrow">
+					<span class="glyphicon glyphicon-triangle-bottom" aria-hidden="true"></span>
+				</a>
+			</div>		
+
+			<div class="comment-content col-xs-11 col-md-8 col-lg-8">
+				{{content}}
+			</div>
+
+			<div class="col-xs-12 col-md-3 comment-metadata">
+				<div class="user_name">{{user}}</div>
+				<div class="date">{{date}}</div>
+			</div>
+
+		</div>
+
+	</li>
+</template>
