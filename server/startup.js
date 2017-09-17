@@ -15,9 +15,11 @@ if (!Websites.findOne()){
 			user:"GMSITTER",
 			content:"test comment",
 			date: new Date(),
+			voted: ["GMSITTER"],
 			}
 		],
-		rating:1
+		rating:1,
+		voted: [],
 	});
 }
 

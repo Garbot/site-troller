@@ -8,15 +8,14 @@ Meteor.methods({
 
 	    Websites.update(
 	    {
-	      _id: _id, 
+	      _id: _id,
 	      "comments.commentnumber" : commentnumber
-	    }, 
+	    },
 	    {
 	      $inc: {
 	   		"comments.$.rating" : increment
 	      }
-	    });
-
+	    })
 	}
 });
 
@@ -26,3 +25,5 @@ WebsitesIndex = new EasySearch.Index({
   fields: ['title', 'url', 'description'],
   engine: new EasySearch.Minimongo()
 });
+
+console.log(Websites)

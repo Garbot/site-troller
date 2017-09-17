@@ -8,7 +8,6 @@
 //		- compile total upvotes minus total downvotes for rating.
 // - better styling
 // - infinite scroll
-// - security - DONE
 // - autocomplete http:// on urls.
 // - have search operate based on filter of existing results instead of separate page.
 //		- see image_share main.js for example.
@@ -54,7 +53,7 @@ Router.route('/search', function () {
 	this.render('website_form', {
 	to: "form"
 	});
-	
+
 	this.render('searchBox', {
 	to: "main"
 	})
@@ -73,7 +72,7 @@ lastScrollTop=0;              //position before scrolling.
 $(window).scroll(function(event){
   //test if they are near bottom of window
   if($(window).scrollTop()+ $(window).height() > $(document).height() - 100){
-    
+
     var scrollTop = $(this).scrollTop();  //where are we in the page?
     console.log("test1");
     if(scrollTop>lastScrollTop){          //test if we are going down.
@@ -81,13 +80,13 @@ $(window).scroll(function(event){
       Session.set("item_limit", Session.get("item_limit") + 4); //load 4 new images when scrolling down.
     }
     lastScrollTop = scrollTop;   //reset scroll position.
-  } 
+  }
 });
 //end infinite scroll
 
 
 /////
-// template helpers 
+// template helpers
 /////
 
 Template.searchBox.helpers({
@@ -116,7 +115,7 @@ Template.website_item.events({
 		// example of how you can access the id for the website in the database
 		// (this is the data context for the template)
 		var website_id = this._id;
-		var currPos = $("#"+website_id).index();		
+		var currPos = $("#"+website_id).index();
 		console.log(currPos);
 		console.log("Up voting website with id "+website_id);
 
@@ -129,7 +128,7 @@ Template.website_item.events({
     		$("#"+website_id).next().hide().fadeIn(1000);
     	}
 		return false;// prevent the button from reloading the page
-	}, 
+	},
 
 	"click .js-downvote":function(event){
 
@@ -162,7 +161,7 @@ Template.navigation.events({
 Template.website_form.events({
 	"click .js-toggle-website-form":function(event){
 		$("#website_form").toggle('slow');
-	}, 
+	},
 
 	"submit .js-save-website-form":function(event){
 
@@ -177,15 +176,16 @@ Template.website_form.events({
 	          title:title,
 	          description:description,
 	          createdOn:new Date(),
-	          rating:0
+	          rating:0,
+            voted:[user]
 	        }
 	      );
 
 	    }
-		
+
 		$("#website_form").toggle('slow');
 		$(".js-save-website-form")[0].reset();
-		
+
 		return false;// stop the form submit from reloading the page
 
 	}
@@ -213,15 +213,16 @@ Template.website_item_detail.events({
 						rating:0,
 						user:user,
 						content:content,
-						date:new Date()
+						date:new Date(),
+            voted:[user]
 						}
 					}
 				});
 		}
-	
+
 		$("#comment_form").toggle('slow');
 		$(".js-add-comment-form")[0].reset();
-	
+
 		return false;// stop the form submit from reloading the page
 
 	},
@@ -243,7 +244,7 @@ Template.website_item_detail.events({
     		$("#"+website_id).next().hide().fadeIn(1000);
     	}
 		return false;// prevent the button from reloading the page
-	}, 
+	},
 
 	"click .js-downvote":function(event){
 
@@ -274,19 +275,19 @@ Template.ind_comment.events({
 		var commentID = $(event.currentTarget).closest('.list_item').attr('id');
 
 		console.log(currPos + " - " + commentID + " - " + websiteID);
-		
-		
+
+
 		Meteor.call("vote_comment", websiteID, commentID, 1, function(){
 			if($("#"+commentID).index() != currPos){		//animation transition for the elements being swapped.
 	    		$("#"+commentID).hide().fadeIn(1000);		//passed async to animate properly (see Meteor.call docs)
 	    		$("#"+commentID).next().hide().fadeIn(1000);
 	    	}
 		});		//call meteor method for comment voting
-		
+
 
 
 		return false;// prevent the button from reloading the page
-	}, 
+	},
 
 	"click .js-downvote":function(event){
 		// example of how you can access the id for the website in the database
@@ -296,7 +297,7 @@ Template.ind_comment.events({
 		var commentID = $(event.currentTarget).closest('.list_item').attr('id');
 
 		console.log(currPos + " - " + commentID + " - " + websiteID);
-		
+
 		Meteor.call("vote_comment", websiteID, commentID, -1, function(){
 			if($("#"+commentID).index() != currPos){		//animation transition for the elements being swapped.
 	    		$("#"+commentID).hide().fadeIn(1000);		//passed async to animate properly (see Meteor.call docs)

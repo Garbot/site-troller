@@ -29,22 +29,26 @@
         <ul class="nav navbar-nav">
 	        <li>
 		        <a href="/">
-			    	Site Troller
-			    </a>
-		 	</li>
+			    	  <span class="brand">Site Troller</span>
+    			  </a>
+    		 	</li>
 	        <li>
-				{{#if currentUser}}
-				<a class="js-toggle-website-form" href="#">
-			  		<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>  Submit Link
-				</a>
-				{{/if}}
+    				{{#if currentUser}}
+    				<a class="js-toggle-website-form" href="#">
+    			  		<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>  Submit Link
+    				</a>
+    				{{/if}}
 	        </li>
 	        <li>
 	        	<a href="/search">
 	        		<span class="glyphicon glyphicon-search" aria-hidden="true"></span> Search
 	        	</a>
 	        </li>
-	        <li><div class="navbar-form navbar-right"><span class="loginButtons">{{>loginButtons}}</span></div></li>
+	        <li id="login">
+            <a>
+              <span class="loginButtons">{{>loginButtons}}</span>
+            </a>
+          </li>
         </ul>
 
       </div><!-- / un-collapsed navbar-->
@@ -55,24 +59,26 @@
 
 
 <template name="website_form">
-	<div id="website_form" class="hidden_div">
-		<form class="js-save-website-form">
-		  <div class="form-group">
-		    <label for="url">Site address</label>
-		    <input type="text" class="form-control" id="url" placeholder="http://www.mysite.com">
-		  </div>
-		  <div class="form-group">
-		    <label for="title">Title</label>
-		    <input type="text" class="form-control" id="title" placeholder="Mysite">
-		  </div>
-		    <div class="form-group">
-		    <label for="description">Description</label>
-		    <input type="text" class="form-control" id="description" placeholder="I found this site really useful for ...">
-		  </div>
+  <div class="container">
+  	<div id="website_form" class="hidden_div">
+  		<form class="js-save-website-form">
+  		  <div class="form-group">
+  		    <label for="url">Site address</label>
+  		    <input type="text" class="form-control" id="url" placeholder="http://www.mysite.com">
+  		  </div>
+  		  <div class="form-group">
+  		    <label for="title">Title</label>
+  		    <input type="text" class="form-control" id="title" placeholder="Mysite">
+  		  </div>
+  		    <div class="form-group">
+  		    <label for="description">Description</label>
+  		    <input type="text" class="form-control" id="description" placeholder="I found this site really useful for ...">
+  		  </div>
 
-		  <button type="submit" class="btn btn-default">Submit</button>
-		</form>
-	</div>
+  		  <button type="submit" class="btn btn-default">Submit</button>
+  		</form>
+  	</div>
+  </div>
 </template>
 
 <!-- template that displays several website items -->
@@ -106,31 +112,36 @@
 
 <!-- template that displays individual website entries -->
 <template name="website_item">
-	<!--<div class="row">-->
-	<li class="list_item" id="{{_id}}">
-		<div class="row">
-			<a href="{{url}}">{{title}}</a>
-			<p>
-				{{description}}
-			</p>
+	<div class="row" id="{{_id}}">
+  	<li class="list_item">
+  		<!-- <div class="row"> -->
+  			<a href="{{url}}">{{title}}</a>
+    			<p>
+    				{{description}}
+    			</p>
 
-			<p>
-					<a href="/site/{{_id}}">Details</a>
-			</p>
-			<div class="col-md-2 BUTANS">
-				<p>
-				Rating: <strong>{{rating}}&nbsp;</strong>
-				</p>
-				<a href="#" class="btn btn-default js-upvote">
-					<span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span>
-				</a>
-				<a href="#" class="btn btn-default js-downvote">
-					<span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span>
-				</a>
-			</div>
-		</div>
-	</li>
-	<!--</div> THROWS OFF ANIMATION FOR SOME REASON?  INVESTIGAT WHEN YOU HAVE INTERWEBS-->
+    			<p>
+    					<a href="/site/{{_id}}">Details</a>
+    			</p>
+  			<div class="BUTANS">
+
+  				<!-- <a href="#" class="btn btn-default js-upvote">
+  					<span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span>
+  				</a>
+  				<a href="#" class="btn btn-default js-downvote">
+  					<span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span>
+  				</a> -->
+          <a href="#" class="js-upvote vote-arrow">
+  					<span class="glyphicon glyphicon-triangle-top" aria-hidden="true"></span>
+  				</a>
+  					<span class="rating"><strong>{{rating}}&nbsp;</strong></span>
+  				<a href="#" class="js-downvote vote-arrow">
+  					<span class="glyphicon glyphicon-triangle-bottom" aria-hidden="true"></span>
+  				</a>
+  			</div>
+  		<!-- </div> -->
+  	</li>
+	</div>
 </template>
 
 <template name="website_item_detail">
