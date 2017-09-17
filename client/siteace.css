@@ -59,6 +59,10 @@ ul {
 	font-weight: bold;
 }
 
+.navbar-default {
+	border-radius: 0px
+}
+
 @media (min-width: 1000px) {		/*shift commenter metadata down 20px on larger screens*/
 	.comment-metadata {
 		margin-top:20px;

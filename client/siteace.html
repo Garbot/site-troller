@@ -18,7 +18,7 @@
 <template name="navigation">
   <nav class="navbar navbar-default">
     <div class="container-fluid">
-  
+
       <!-- start collapsed navbar-->
       <div class="navbar-header">
         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#main_navbar" aria-expanded="false"><span class="glyphicon glyphicon-menu-hamburger"></span></button>
@@ -35,7 +35,7 @@
 	        <li>
 				{{#if currentUser}}
 				<a class="js-toggle-website-form" href="#">
-			  		<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>  Add Website
+			  		<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>  Submit Link
 				</a>
 				{{/if}}
 	        </li>
@@ -134,7 +134,7 @@
 </template>
 
 <template name="website_item_detail">
-	
+
 	<div class="container website-item-detail" id="{{_id}}">
 		<div class="row">
 			<div class="col-xs-1 vote-box">
@@ -145,8 +145,8 @@
 				<a href="#" class="js-downvote">
 					<span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
 				</a>
-			</div>			
-			
+			</div>
+
 			<div class="col-xs-11">
 				<div><a href="{{url}}">{{title}}</a></div>
 				<div>{{description}}</div>
@@ -158,9 +158,9 @@
 			{{#if currentUser}}
 				<a class="btn btn-default js-toggle-comment-form" href="#">
 			  		<span class="glyphicon glyphicon-comment" aria-hidden="true"></span> Comment
-				</a>			
+				</a>
 			{{/if}}
-		</div>	
+		</div>
 
 		<div id="comment_form" class="hidden_div container">
 			<form class="js-add-comment-form">
@@ -188,7 +188,7 @@
 <template name="ind_comment">
 	<li class="list_item" id="{{commentnumber}}">
 		<div class="row ind-comment">
-			
+
 			<div class="col-xs-1 vote-box">
 				<a href="#" class="js-upvote vote-arrow">
 					<span class="glyphicon glyphicon-triangle-top" aria-hidden="true"></span>
@@ -197,7 +197,7 @@
 				<a href="#" class="js-downvote vote-arrow">
 					<span class="glyphicon glyphicon-triangle-bottom" aria-hidden="true"></span>
 				</a>
-			</div>		
+			</div>
 
 			<div class="comment-content col-xs-11 col-md-8 col-lg-8">
 				{{content}}
