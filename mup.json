@@ -1,0 +1,29 @@
+{
+  "servers": [
+    {
+      "host": "ec2-52-206-192-26.compute-1.amazonaws.com",
+      "username": "ubuntu",
+      "pem": "~/Documents/site-troller.pem",
+      "env": {}
+    }
+  ],
+
+  "setupMongo": true,
+
+  "appName": "site-troller",
+
+  "app": "/Users/Garrett/Documents/Javascript/javascript/Coursera Responsive course/Course 3 - Meteor.js development/dev/site_troller",
+
+  "env": {
+    "PORT": 80,
+    "ROOT_URL": "ec2-52-206-192-26.compute-1.amazonaws.com"
+  },
+
+  "deployCheckWaitTime": 60,
+
+  "enableUploadProgressBar": true,
+  "buildOptions": {
+     "debug": true,
+     "executable": "meteor"
+  }
+}
