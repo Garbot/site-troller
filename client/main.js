@@ -177,10 +177,10 @@ Template.website_form.events({
 	          description:description,
 	          createdOn:new Date(),
 	          rating:0,
-            voted:[user]
+            voted:[Meteor.user().username]
 	        }
 	      );
-
+        console.log("insert block successful")
 	    }
 
 		$("#website_form").toggle('slow');
@@ -214,7 +214,7 @@ Template.website_item_detail.events({
 						user:user,
 						content:content,
 						date:new Date(),
-            voted:[user]
+            voted:[Meteor.user().username]
 						}
 					}
 				});
@@ -232,8 +232,6 @@ Template.website_item_detail.events({
 		// (this is the data context for the template)
 		var website_id = this._id;
 		var currPos = $("#"+website_id).index();
-		console.log(currPos);
-		console.log("Up voting website with id "+website_id);
 
 		Websites.update(
 			{_id:website_id},

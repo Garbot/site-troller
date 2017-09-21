@@ -1,7 +1,7 @@
 Meteor.startup(function () {
 // code to run on server at startup
 if (!Websites.findOne()){
-	console.log("No websites yet. Creating starter data.");
+	console.log("No links yet. Creating starter data.");
 
 	Websites.insert({
 		title:"Google",
