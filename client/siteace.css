@@ -6,7 +6,6 @@
 	margin-bottom: 3em;
 }
 
-
 .hidden_div{
 	display:none;
 }
@@ -18,6 +17,14 @@
 
 .vote-arrow {
 	display:block;
+}
+
+.glyphicon {
+	transition: all 0.2s ease-in-out;
+}
+
+.voted {
+	color: #c87f0a;
 }
 
 .rating {

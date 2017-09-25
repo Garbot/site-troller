@@ -74,9 +74,8 @@ $(window).scroll(function(event){
   if($(window).scrollTop()+ $(window).height() > $(document).height() - 100){
 
     var scrollTop = $(this).scrollTop();  //where are we in the page?
-    console.log("test1");
+
     if(scrollTop>lastScrollTop){          //test if we are going down.
-      console.log("test2");
       Session.set("item_limit", Session.get("item_limit") + 4); //load 4 new images when scrolling down.
     }
     lastScrollTop = scrollTop;   //reset scroll position.
@@ -100,6 +99,44 @@ Template.website_list.helpers({
 	}
 });
 
+//check if user has voted - used to style arrows
+Template.website_item.helpers({
+  upvoted:function(){
+    var user = Meteor.user().username;
+    var vote = Websites.findOne(
+      {_id: Template.currentData()._id,}
+    )
+
+    vote = vote.votes.filter(function(x){
+      if(x.username == user){
+        return true;
+      }
+    })
+
+    //will be added as class to the arrow
+    if(vote[0].rating > 0){
+        return "voted";
+    }
+  },
+  downvoted:function(){
+    var user = Meteor.user().username;
+    var vote = Websites.findOne(
+      {_id: Template.currentData()._id,}
+    )
+
+    vote = vote.votes.filter(function(x){
+      if(x.username == user){
+        return true;
+      }
+    })
+
+    //will be added as class to the arrow
+    if(vote[0].rating < 0){
+        return "voted";
+    }
+  }
+});
+
 Template.website_item_detail.helpers({
 	comments:function(){
 		var comment_data = Websites.findOne({_id:Template.currentData()._id}).comments;
@@ -116,17 +153,21 @@ Template.website_item.events({
 		// (this is the data context for the template)
 		var website_id = this._id;
 		var currPos = $("#"+website_id).index();
-		console.log(currPos);
-		console.log("Up voting website with id "+website_id);
+    var user = Meteor.user().username;
 
-		Websites.update(
-			{_id:website_id},
-			{$inc:{rating:1}}
-		);
+    Meteor.call("vote_website", website_id, user, 1, function(){
+			if($("#"+website_id).index() != currPos){		//animation transition for the elements being swapped.
+	    		$("#"+website_id).hide().fadeIn(1000);		//passed async to animate properly (see Meteor.call docs)
+	    		$("#"+website_id).prev().hide().fadeIn(1000);
+	    	}
+		});
+
+    /*
 		if($("#"+website_id).index() != currPos){		//animation transition for the elements being swapped.
     		$("#"+website_id).hide().fadeIn(1000);
     		$("#"+website_id).next().hide().fadeIn(1000);
     	}
+    */
 		return false;// prevent the button from reloading the page
 	},
 
@@ -136,18 +177,20 @@ Template.website_item.events({
 		// (this is the data context for the template)
 		var website_id = this._id;
 		var currPos = $("#"+website_id).index();
-		console.log(currPos);
-		console.log("Down voting website with id "+website_id);
-		Websites.update(
-			{_id:website_id},
-			{$inc:{rating:-1}}
-		);
+    var user = Meteor.user().username;
 
+    Meteor.call("vote_website", website_id, user, -1, function(){
+			if($("#"+website_id).index() != currPos){		//animation transition for the elements being swapped.
+	    		$("#"+website_id).hide().fadeIn(1000);		//passed async to animate properly (see Meteor.call docs)
+	    		$("#"+website_id).prev().hide().fadeIn(1000);
+	    	}
+		});
+    /*
 		if($("#"+website_id).index() != currPos){		//animation transition for the elements being swapped.
     		$("#"+website_id).hide().fadeIn(1000);
-    		console.log("test");
     		$("#"+website_id).prev().hide().fadeIn(1000);
     	}
+    */
 		return false;// prevent the button from reloading the page
 	}
 });
@@ -177,7 +220,6 @@ Template.website_form.events({
 	          description:description,
 	          createdOn:new Date(),
 	          rating:0,
-            voted:[Meteor.user().username]
 	        }
 	      );
         console.log("insert block successful")
@@ -214,7 +256,7 @@ Template.website_item_detail.events({
 						user:user,
 						content:content,
 						date:new Date(),
-            voted:[Meteor.user().username]
+            voted:[user]
 						}
 					}
 				});
@@ -235,7 +277,8 @@ Template.website_item_detail.events({
 
 		Websites.update(
 			{_id:website_id},
-			{$inc:{rating:1}}
+			{$inc:{rating:1}},
+      {voted:[Meteor.user().username]}
 		);
 		if($("#"+website_id).index() != currPos){		//animation transition for the elements being swapped.
     		$("#"+website_id).hide().fadeIn(1000);
